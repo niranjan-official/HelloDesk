@@ -71,23 +71,20 @@ export default function Home() {
   };
 
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center">
+    <div className="relative flex h-screen w-full flex-col items-center justify-center">
       <div className="flex items-center gap-6 text-4xl font-extrabold">
-        <div className="flex aspect-square w-36 flex-col items-center justify-center rounded-[0.6rem] border-4 border-slate-950 p-4">
+        <div className="absolute right-5 top-5 flex aspect-square w-16 flex-col items-center justify-center rounded-[0.6rem] border-4 border-slate-950 p-4">
           {currentToken !== -1 ? (
-            <div className="flex flex-col text-center">
-              <span className="text-sm">Current Token</span>
-              {currentToken}
-            </div>
+            <div className="flex flex-col text-center">{currentToken}</div>
           ) : (
             <VscLoading size={25} className="animate-spin" />
           )}
         </div>
-        <div className="flex aspect-square w-36 flex-col items-center justify-center rounded-[0.6rem] border-4 border-slate-950 p-4">
+        <div className="flex w-36 h-48 flex-col items-center justify-between gap-6 rounded-[1rem] border-8 border-slate-950">
+          <div className="h-8 w-full bg-black"></div>
           {!tokenLoad ? (
             yourToken !== -1 ? (
-              <div className="flex flex-col text-center">
-                <span className="text-sm">Your Token</span>
+              <div className="flex flex-col text-center text-6xl">
                 {yourToken}
               </div>
             ) : (
@@ -101,13 +98,17 @@ export default function Home() {
           ) : (
             <VscLoading size={25} className="animate-spin" />
           )}
+          <div className="h-8 w-full bg-black"></div>
         </div>
       </div>
-      {
-        ((yourToken !== -1) && (currentToken > yourToken)) && (
-          <button onClick={generateToken} className="p-2 px-4 bg-black text-white mt-4 rounded-xl">Regenerate</button>
-        )
-      }
+      {yourToken !== -1 && currentToken > yourToken && (
+        <button
+          onClick={generateToken}
+          className="mt-4 rounded-xl bg-black p-2 px-4 text-white"
+        >
+          Regenerate
+        </button>
+      )}
     </div>
   );
 }

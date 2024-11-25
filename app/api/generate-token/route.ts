@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { doc, runTransaction } from "firebase/firestore";
+import { doc, runTransaction, setDoc } from "firebase/firestore";
 import { db } from "@/firebase";
 
 export async function POST(req: NextRequest) {
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const token = await runTransaction(db, async (transaction) => {
-
+      // Fetch and update the token counter
       const counterDoc = await transaction.get(counterDocRef);
 
       let nextValue = 1;
@@ -31,6 +31,7 @@ export async function POST(req: NextRequest) {
         transaction.set(counterDocRef, { token: nextValue });
       }
 
+      // Update the user's document with the new token and timestamp
       const timestamp = new Date().toISOString();
       transaction.set(
         userDocRef,
@@ -42,6 +43,15 @@ export async function POST(req: NextRequest) {
       );
 
       return nextValue;
+    });
+
+    // Parallel write: Add the token document to the "tokens" collection
+    const tokenDocRef = doc(db, "tokens", token.toString());
+    await setDoc(tokenDocRef, {
+      uid: uid,
+      token: token,
+      created_at: new Date().toISOString(),
+      status: "pending"
     });
 
     return NextResponse.json({
