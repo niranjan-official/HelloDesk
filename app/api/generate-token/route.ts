@@ -14,7 +14,6 @@ export async function POST(req: NextRequest) {
   }
 
   const counterDocRef = doc(db, "counters", "tokenDetails");
-  const userDocRef = doc(db, "users", uid);
 
   try {
     const token = await runTransaction(db, async (transaction) => {
@@ -31,21 +30,9 @@ export async function POST(req: NextRequest) {
         transaction.set(counterDocRef, { token: nextValue });
       }
 
-      // Update the user's document with the new token and timestamp
-      const timestamp = new Date().toISOString();
-      transaction.set(
-        userDocRef,
-        {
-          token: nextValue,
-          last_token: timestamp,
-        },
-        { merge: true }
-      );
-
       return nextValue;
     });
 
-    // Parallel write: Add the token document to the "tokens" collection
     const tokenDocRef = doc(db, "tokens", token.toString());
     await setDoc(tokenDocRef, {
       uid: uid,

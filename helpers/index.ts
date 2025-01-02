@@ -1,38 +1,64 @@
 import { db } from "@/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { Token } from "@/types";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
 
 export const checkPreviousToken = async (uid: string) => {
-  const docRef = doc(db, "users", uid);
-  const docSnap = await getDoc(docRef);
+  try {
+    const q = query(
+      collection(db, "tokens"),
+      where("uid", "==", uid),
+      orderBy("created_at", "desc"),
+      limit(1),
+    );
+    let tokenData: Token[] = [];
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      const data = doc.data() as Token;
+      tokenData.push({ ...data });
+    });
+    const token = tokenData[0];
+    console.log(token);
 
-  if (!docSnap.exists()) {
-    return { success: false, error: "user not logged in" };
-  }
+    if (!token) {
+      return {
+        success: true,
+        message: "No previous token found",
+      };
+    }
 
-  const data = docSnap.data();
-  if (!data.last_token) {
-    return { success: true, tokenExist: false, error: "No previous token found" };
-  }
+    const lastTokenDate = new Date(token.created_at);
+    const currentDate = new Date();
 
-  const lastTokenDate = new Date(data.last_token);
-  const currentDate = new Date();
+    const isSameDay =
+      lastTokenDate.getFullYear() === currentDate.getFullYear() &&
+      lastTokenDate.getMonth() === currentDate.getMonth() &&
+      lastTokenDate.getDate() === currentDate.getDate();
 
-  const isSameDay =
-    lastTokenDate.getFullYear() === currentDate.getFullYear() &&
-    lastTokenDate.getMonth() === currentDate.getMonth() &&
-    lastTokenDate.getDate() === currentDate.getDate();
-
-  if (isSameDay) {
+    if (isSameDay) {
+      return {
+        success: true,
+        message:"Toke Found",
+        token: token,
+      };
+    }else{
+      return {
+        success: true,
+        message: "Previous token not on same day",
+      };
+    }
+  } catch (error: any) {
     return {
       success: true,
-      tokenExist: true,
-      token: data.token,
+      error: error.message,
     };
   }
-
-  return {
-    success: true,
-    tokenExist: false,
-    error: "Token expired or not found for today",
-  };
 };
