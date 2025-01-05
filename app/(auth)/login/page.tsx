@@ -5,12 +5,14 @@ import { useRouter } from "next/navigation";
 import { VscLoading } from "react-icons/vsc";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/firebase";
+import { useToast } from "@/hooks/use-toast";
 
 const page = () => {
   const Router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [load, setLoad] = useState(false);
+  const { toast } = useToast();
 
   const login = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -20,7 +22,20 @@ const page = () => {
       await signInWithEmailAndPassword(auth, email, password);
       Router.push("/");
     } catch (error: any) {
-      console.error("Login failed:", error.message);
+      console.error("Login failed:", error.code);
+      if(error.code === "auth/invalid-credential"){
+        toast({
+          variant: "destructive",
+          title: "Login failed",
+          description: "Invalid Email or password",
+        });
+      }else{
+        toast({
+          variant: "destructive",
+          title: "Login failed",
+          description: error.message,
+        });
+      }
       setLoad(false);
     }
   };

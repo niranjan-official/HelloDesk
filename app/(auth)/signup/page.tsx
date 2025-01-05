@@ -6,10 +6,13 @@ import { auth, db } from "@/firebase"; // Ensure you import Firestore
 import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { VscLoading } from "react-icons/vsc";
+import { useToast } from "@/hooks/use-toast"
+
 
 const SignupPage = () => {
   const Router = useRouter();
   const [load, setLoad] = useState(false);
+  const { toast } = useToast();
 
   const signup = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -27,7 +30,12 @@ const SignupPage = () => {
 
     // Check if passwords match
     if (data.password !== data.confirm) {
-      alert("Passwords do not match!");
+      toast({
+        variant: "destructive",
+        title: "Passwords does not match",
+        description: "Ensure that both the passwords provided are same",
+      })
+      setLoad(false);
       return;
     }
 
@@ -54,7 +62,11 @@ const SignupPage = () => {
       Router.push("/");
     } catch (error: any) {
       console.error("Error during signup:", error);
-      alert("Error during signup. Please try again."+error.message);
+      toast({
+        variant: "destructive",
+        title: "Signup failed",
+        description: error.message,
+      })
       setLoad(false);
     }
   };
