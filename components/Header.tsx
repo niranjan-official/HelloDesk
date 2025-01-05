@@ -77,8 +77,7 @@ const Header = () => {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Do you want to logout ?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    your account and remove your data from our servers.
+                    This action cannot be undone. You will need to login again to continue using your account.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
