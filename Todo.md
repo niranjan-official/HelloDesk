@@ -1,7 +1,7 @@
 # USER-FEATURES
 
-1. Sign up issue
-2. Repeat token
+<!-- 1. Sign up issue -->
+<!-- 2. Repeat token -->
 3. Logo
 <!-- 4. logout -->
 

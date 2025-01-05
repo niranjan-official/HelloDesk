@@ -6,9 +6,11 @@ import React, { ReactNode } from "react";
 const layout = ({ children }: { children: ReactNode }) => {
   const User = useAuth();
   return (
-    <div className="flex flex-col w-full h-screen overflow-hidden">
-      <Header />
-      {children}
+    <div className="flex h-screen w-full flex-col items-center sm:justify-center overflow-hidden">
+      <div className="max-w-2xl">
+        <Header />
+        {children}
+      </div>
     </div>
   );
 };

@@ -13,6 +13,7 @@ export default function Home() {
   const [isRunning, setIsRunning] = useState(true);
   const [date, setDate] = useState("");
   const [uid, setUid] = useState("");
+  const [status, setStatus] = useState("");
 
   useEffect(() => {
     setTimeout(() => {
@@ -44,8 +45,16 @@ export default function Home() {
     onValue(starCountRef, (snapshot) => {
       const data = snapshot.val();
       setCurrentToken(data);
+
+      if (yourToken !== -1) {
+        if (data > yourToken) {
+          setStatus("skipped");
+        } else {
+          setStatus("pending");
+        }
+      }
     });
-  }, []);
+  }, [yourToken]);
 
   const checkTokenHistory = async () => {
     const res = await checkPreviousToken(uid);
@@ -59,6 +68,7 @@ export default function Home() {
 
     if (res.token) {
       setYourToken(res.token.token);
+      setStatus(res.token.status);
       const newDate = new Date(res.token.created_at);
       const formattedTimeIST = newDate.toLocaleTimeString("en-IN", {
         timeZone: "Asia/Kolkata",
@@ -116,7 +126,7 @@ export default function Home() {
           (yourToken !== -1 && currentToken <= yourToken)
         }
         onClick={generateToken}
-        className="mt-6 flex w-full justify-center rounded-[0.4rem] bg-black p-2 font-medium text-white shadow disabled:bg-zinc-600"
+        className="mt-6 flex w-full justify-center rounded-[0.4rem] bg-[#9c0f05] p-2 font-medium text-white shadow disabled:bg-zinc-600"
       >
         {" "}
         {tokenLoad ? (
@@ -153,6 +163,7 @@ export default function Home() {
             <p className="mt-1 text-sm text-neutral-600">
               Generated At <span className="uppercase">{date}</span>
             </p>
+            <p className="text-sm text-yellow-600">{status === "pending" && "Token is in pending list"}</p>
           </div>
           <span className="text-4xl font-bold">:</span>
           <span className="text-6xl font-extrabold">{yourToken}</span>

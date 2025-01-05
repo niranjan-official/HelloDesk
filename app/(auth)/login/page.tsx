@@ -6,6 +6,7 @@ import { VscLoading } from "react-icons/vsc";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/firebase";
 import { useToast } from "@/hooks/use-toast";
+import Image from "next/image";
 
 const page = () => {
   const Router = useRouter();
@@ -19,17 +20,21 @@ const page = () => {
     setLoad(true);
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(
+        auth,
+        email.trim().toLowerCase(),
+        password.trim().toLowerCase(),
+      );
       Router.push("/");
     } catch (error: any) {
       console.error("Login failed:", error.code);
-      if(error.code === "auth/invalid-credential"){
+      if (error.code === "auth/invalid-credential") {
         toast({
           variant: "destructive",
           title: "Login failed",
           description: "Invalid Email or password",
         });
-      }else{
+      } else {
         toast({
           variant: "destructive",
           title: "Login failed",
@@ -47,16 +52,14 @@ const page = () => {
         onSubmit={login}
       >
         <div className="flex flex-col items-center justify-end">
-          <p className="font-serif text-2xl">Login In To</p>
-          <h1 className="font-sans text-4xl font-extrabold text-black/80">
-            Hello Desk Prc
-          </h1>
-          <p className="text-sm text-black/50">Powered by μLearn PRC</p>
+          <Image src={"/prc-official.png"} width={120} height={120} alt=".." />
+          <p className="mt-4 text-3xl font-semibold tracking-wide">Welcome Back</p>
+          <p className="text-xs">Enter your credential to login</p>
           <hr className="mt-3 w-3/4 bg-black/10" />
         </div>
 
         <label htmlFor="email" className="flex flex-col gap-2">
-          <span className="w-max rounded-xl bg-rose-200 p-2 px-4 font-serif text-sm">
+          <span className="w-max rounded-[0.5rem] bg-rose-200 p-2 px-4 font-serif text-sm">
             E Mail
           </span>
           <input
@@ -64,14 +67,13 @@ const page = () => {
             name="email"
             id="email"
             placeholder="example@gmail.com"
-            className="border-2 border-black/30"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </label>
 
         <label htmlFor="password" className="flex flex-col gap-2">
-          <span className="w-max rounded-xl bg-purple-300 p-2 px-4 font-serif text-sm">
+          <span className="w-max rounded-[0.5rem] bg-purple-300 p-2 px-4 font-serif text-sm">
             Password
           </span>
           <input
@@ -79,7 +81,6 @@ const page = () => {
             name="password"
             id="password"
             placeholder="password"
-            className="border-2 border-black/30"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />

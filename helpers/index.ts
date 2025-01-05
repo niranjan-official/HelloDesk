@@ -46,7 +46,7 @@ export const checkPreviousToken = async (uid: string) => {
     if (isSameDay) {
       return {
         success: true,
-        message:"Toke Found",
+        message:"Token Found",
         token: token,
       };
     }else{

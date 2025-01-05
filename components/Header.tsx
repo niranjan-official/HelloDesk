@@ -26,7 +26,14 @@ import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { VscLoading } from "react-icons/vsc";
+import Image from "next/image";
+import { Oleo_Script } from 'next/font/google'
 
+const oleo = Oleo_Script({
+  subsets: ['latin'],
+  display: 'swap',
+  weight: '700'
+})
 const Header = () => {
   const [load, setLoad] = useState(false);
   const Router = useRouter();
@@ -46,9 +53,9 @@ const Header = () => {
   return (
     <div className="flex items-center justify-between border-b p-4 shadow">
       <div className="flex items-center gap-2">
-        <FaUniversity size={35} />
+        <Image src={'/prc-official.png'} width={60} height={60} alt=".." />
         <div className="flex flex-col">
-          <h1 className="mt-1 text-lg font-extrabold leading-5">Hello Desk</h1>
+          <h1 className={`mt-1 text-xl font-extrabold leading-5 ${oleo.className}`}>Hello Desk</h1>
           <p className="text-xs uppercase text-neutral-500">
             providence college of engineering
           </p>

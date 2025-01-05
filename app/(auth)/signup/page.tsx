@@ -6,8 +6,8 @@ import { auth, db } from "@/firebase"; // Ensure you import Firestore
 import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { VscLoading } from "react-icons/vsc";
-import { useToast } from "@/hooks/use-toast"
-
+import { useToast } from "@/hooks/use-toast";
+import Image from "next/image";
 
 const SignupPage = () => {
   const Router = useRouter();
@@ -34,7 +34,7 @@ const SignupPage = () => {
         variant: "destructive",
         title: "Passwords does not match",
         description: "Ensure that both the passwords provided are same",
-      })
+      });
       setLoad(false);
       return;
     }
@@ -43,8 +43,8 @@ const SignupPage = () => {
       // Create user in Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(
         auth,
-        data.email,
-        data.password,
+        data.email.trim().toLowerCase(),
+        data.password.trim().toLowerCase(),
       );
 
       const user = userCredential.user;
@@ -66,7 +66,7 @@ const SignupPage = () => {
         variant: "destructive",
         title: "Signup failed",
         description: error.message,
-      })
+      });
       setLoad(false);
     }
   };
@@ -74,19 +74,17 @@ const SignupPage = () => {
   return (
     <div className="m-h-screen flex w-full flex-col items-center justify-center bg-slate-50 p-4">
       <form
-        className="flex w-full flex-col gap-4 rounded-xl border-2 border-black/50 bg-white p-4 shadow-xl md:w-80"
+        className="flex w-full flex-col gap-4 rounded-xl border-2 border-black/50 bg-white p-4 shadow-xl md:w-80 "
         onSubmit={signup}
       >
         <div className="flex flex-col items-center justify-end">
-          <p className="font-serif text-2xl">Sign Up For</p>
-          <h1 className="font-sans text-4xl font-extrabold text-black/80">
-            Hello Desk PRC
-          </h1>
-          <p className="text-sm text-black/50">Powered by μLearn PRC</p>
+          <Image src={"/prc-official.png"} width={120} height={120} alt=".." />
+          <p className="mt-4 text-2xl font-semibold tracking-wide">Create an Account</p>
+          <p className="text-xs">Enter your information</p>
           <hr className="mt-3 w-3/4 bg-black/10" />
         </div>
         <label htmlFor="name" className="flex flex-col gap-2">
-          <span className="w-max rounded-xl bg-rose-200 p-2 px-4 font-serif text-sm">
+          <span className="w-max rounded-[0.5rem] bg-rose-200 p-2 px-4 font-serif text-sm">
             Name
           </span>
           <input
@@ -99,7 +97,7 @@ const SignupPage = () => {
         </label>
 
         <label htmlFor="email" className="flex flex-col gap-2">
-          <span className="w-max rounded-xl bg-purple-300 p-2 px-4 font-serif text-sm">
+          <span className="w-max rounded-[0.5rem] bg-purple-300 p-2 px-4 font-serif text-sm">
             E Mail
           </span>
           <input
@@ -112,7 +110,7 @@ const SignupPage = () => {
         </label>
 
         <label htmlFor="phno" className="flex flex-col gap-2">
-          <span className="w-max rounded-xl bg-green-300 p-2 px-4 font-serif text-sm">
+          <span className="w-max rounded-[0.5rem] bg-green-300 p-2 px-4 font-serif text-sm">
             Phone Number
           </span>
           <input
@@ -125,7 +123,7 @@ const SignupPage = () => {
         </label>
         <div className="flex flex-row justify-between gap-4">
           <label htmlFor="dept" className="flex flex-col gap-2">
-            <span className="w-max rounded-xl bg-orange-300 p-2 px-4 font-serif text-sm">
+            <span className="w-max rounded-[0.5rem] bg-orange-300 p-2 px-4 font-serif text-sm">
               Department
             </span>
             <input
@@ -137,7 +135,7 @@ const SignupPage = () => {
             />
           </label>
           <label htmlFor="year" className="flex flex-col gap-2">
-            <span className="w-max rounded-xl bg-blue-300 p-2 px-4 font-serif text-sm">
+            <span className="w-max rounded-[0.5rem] bg-blue-300 p-2 px-4 font-serif text-sm">
               Year
             </span>
             <input
@@ -151,7 +149,7 @@ const SignupPage = () => {
         </div>
 
         <label htmlFor="password" className="flex flex-col gap-2">
-          <span className="w-max rounded-xl bg-purple-300 p-2 px-4 font-serif text-sm">
+          <span className="w-max rounded-[0.5rem] bg-purple-300 p-2 px-4 font-serif text-sm">
             Password
           </span>
 
@@ -165,7 +163,7 @@ const SignupPage = () => {
         </label>
 
         <label htmlFor="confirm" className="flex flex-col gap-2">
-          <span className="w-max rounded-xl bg-yellow-200 p-2 px-4 font-serif text-sm">
+          <span className="w-max rounded-[0.5rem] bg-yellow-200 p-2 px-4 font-serif text-sm">
             Confirm Password
           </span>
           <input
