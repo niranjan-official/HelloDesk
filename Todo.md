@@ -1,27 +1,9 @@
 # USER-FEATURES
 
-<!-- 1.  Generate Token -w
-
-    > Generate the next number to the latest token number. -->
-
-<!-- 2.  Live Token Display -r
-
-    > Display the live token in real-time which is running on the display screen. -->
-
-3.  Pause Token Generation -r
-
-    > If the generation is paused, then show the pause status.
-
-<!-- 4.  Token Regeneration -w
-
-    > If live token exceeds user token, then user can regenerate their token. -->
-
-<!-- 5.  Login/Logout
-
-    > Deatils required for sign-up
-
-        1. Type of User : student / faculty / guest
-        2. Student / Faculty : Name, college-mail, id, ph-no, password, confirm-password. -->
+1. Sign up issue
+2. Repeat token
+3. Logo
+<!-- 4. logout -->
 
 # ADMIN-FEATURES
 

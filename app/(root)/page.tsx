@@ -14,13 +14,15 @@ export default function Home() {
   const [date, setDate] = useState("");
   const [uid, setUid] = useState("");
 
-  useLayoutEffect(() => {
-    const data = localStorage.getItem("userDeskData");
-    if (data) {
-      const userData = JSON.parse(data);
-      setUid(userData.uid);
-      console.log(userData.uid);
-    }
+  useEffect(() => {
+    setTimeout(() => {
+      const data = localStorage.getItem("userDeskData");
+      if (data) {
+        const userData = JSON.parse(data);
+        setUid(userData.uid);
+        console.log(userData.uid);
+      }
+    }, 100);
   }, []);
 
   useEffect(() => {

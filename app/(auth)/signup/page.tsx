@@ -41,7 +41,6 @@ const SignupPage = () => {
 
       const user = userCredential.user;
 
-      // Write user data to Firestore
       await setDoc(doc(db, "users", user.uid), {
         name: data.name,
         email: data.email,
@@ -53,9 +52,9 @@ const SignupPage = () => {
       });
 
       Router.push("/");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error during signup:", error);
-      alert("Error during signup. Please try again.");
+      alert("Error during signup. Please try again."+error.message);
       setLoad(false);
     }
   };
